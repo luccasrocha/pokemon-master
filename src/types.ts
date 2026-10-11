@@ -38,6 +38,13 @@ export interface PokemonSprites {
   frontDefault: string;
   officialArtwork: string;
   animatedFront?: string;
+  frontShiny?: string;
+  animatedShiny?: string;
+}
+
+export interface PokemonEvolutionMember {
+  id: number;
+  name: string;
 }
 
 export interface Pokemon {
@@ -52,6 +59,8 @@ export interface Pokemon {
   sprites: PokemonSprites;
   generation: number;
   flavorText?: string;
+  cryUrl?: string;
+  evolutionChain?: PokemonEvolutionMember[];
 }
 
 export interface TypeMatchup {
@@ -75,6 +84,7 @@ export interface PokemonTeam {
   typeCoverage: PokemonTypeName[];
   teamWeaknesses: Record<PokemonTypeName, number>;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface BattleTurn {
@@ -88,6 +98,8 @@ export interface BattleTurn {
   effectiveness: 'super-effective' | 'not-very-effective' | 'normal' | 'immune';
   defenderRemainingHp: number;
   message: string;
+  moveName?: string;
+  moveType?: PokemonTypeName;
 }
 
 export interface BattleSimulationResult {
@@ -106,5 +118,34 @@ export interface BattleSimulationResult {
   };
   totalTurns: number;
   turns: BattleTurn[];
+  log: string[];
+}
+
+export interface TeamBattleRound {
+  roundNumber: number;
+  fighter1: { id: number; name: string; remainingHp: number };
+  fighter2: { id: number; name: string; remainingHp: number };
+  winnerId: number;
+  winnerName: string;
+  loserId: number;
+  loserName: string;
+  turns: BattleTurn[];
+  log: string[];
+}
+
+export interface TeamBattleSimulationResult {
+  team1: {
+    name: string;
+    members: Array<{ id: number; name: string }>;
+  };
+  team2: {
+    name: string;
+    members: Array<{ id: number; name: string }>;
+  };
+  winningTeam: 'team1' | 'team2';
+  winningTeamName: string;
+  survivingFighters: Array<{ id: number; name: string; remainingHp: number }>;
+  rounds: TeamBattleRound[];
+  totalRounds: number;
   log: string[];
 }

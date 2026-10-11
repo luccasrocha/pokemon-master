@@ -139,5 +139,32 @@ describe('Pokémon Master REST API Suite', () => {
       expect(res.body.data.turns.length).toBeGreaterThan(0);
       expect(res.body.data.log.length).toBeGreaterThan(0);
     });
+
+    it('POST /api/v1/battle/simulate-team should execute multi-round battle between two teams', async () => {
+      const payload = {
+        team1: {
+          name: 'Ash Team',
+          pokemonIds: [25, 6],
+        },
+        team2: {
+          name: 'Gary Team',
+          pokemonIds: [9, 3],
+        },
+      };
+
+      const res = await request(app).post('/api/v1/battle/simulate-team').send(payload);
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.winningTeam).toBeDefined();
+      expect(res.body.data.rounds.length).toBeGreaterThan(0);
+      expect(res.body.data.log.length).toBeGreaterThan(0);
+    });
+
+    it('GET /api/v1/pokemon/random should return random Pokemon', async () => {
+      const res = await request(app).get('/api/v1/pokemon/random?count=3');
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data).toHaveLength(3);
+    });
   });
 });

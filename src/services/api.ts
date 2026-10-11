@@ -4,6 +4,7 @@ import {
   PokemonTypeName,
   TypeMatchup,
   BattleSimulationResult,
+  TeamBattleSimulationResult,
 } from '../types';
 
 const API_BASE = '/api/v1';
@@ -19,6 +20,7 @@ export async function fetchPokemonList(params: {
   limit?: number;
   search?: string;
   type?: string;
+  ids?: string;
   sortBy?: string;
   order?: string;
 }): Promise<{
@@ -35,6 +37,7 @@ export async function fetchPokemonList(params: {
   if (params.limit) searchParams.set('limit', String(params.limit));
   if (params.search) searchParams.set('search', params.search);
   if (params.type) searchParams.set('type', params.type);
+  if (params.ids) searchParams.set('ids', params.ids);
   if (params.sortBy) searchParams.set('sortBy', params.sortBy);
   if (params.order) searchParams.set('order', params.order);
 
@@ -67,6 +70,13 @@ export async function fetchTypes(): Promise<PokemonTypeName[]> {
   return json.data;
 }
 
+export async function fetchRandomPokemon(count = 1): Promise<Pokemon[]> {
+  const res = await fetch(`${API_BASE}/pokemon/random?count=${count}`);
+  if (!res.ok) throw new Error('Failed to fetch random Pokémon');
+  const json = await res.json();
+  return json.data;
+}
+
 export async function fetchTeams(): Promise<PokemonTeam[]> {
   const res = await fetch(`${API_BASE}/teams`);
   if (!res.ok) throw new Error('Failed to fetch teams');
@@ -92,6 +102,27 @@ export async function createTeam(payload: {
   return json.data;
 }
 
+export async function updateTeam(
+  id: string,
+  payload: {
+    name?: string;
+    description?: string;
+    members?: Array<{ pokemonId: number; nickname?: string }>;
+  }
+): Promise<PokemonTeam> {
+  const res = await fetch(`${API_BASE}/teams/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err?.error?.message || 'Failed to update team');
+  }
+  const json = await res.json();
+  return json.data;
+}
+
 export async function deleteTeam(id: string): Promise<void> {
   const res = await fetch(`${API_BASE}/teams/${id}`, { method: 'DELETE' });
   if (!res.ok) throw new Error('Failed to delete team');
@@ -109,6 +140,23 @@ export async function simulateBattle(payload: {
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err?.error?.message || 'Battle simulation failed');
+  }
+  const json = await res.json();
+  return json.data;
+}
+
+export async function simulateTeamBattle(payload: {
+  team1: { name: string; pokemonIds: number[] };
+  team2: { name: string; pokemonIds: number[] };
+}): Promise<TeamBattleSimulationResult> {
+  const res = await fetch(`${API_BASE}/battle/simulate-team`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err?.error?.message || 'Team battle simulation failed');
   }
   const json = await res.json();
   return json.data;

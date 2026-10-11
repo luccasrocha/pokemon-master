@@ -102,6 +102,12 @@ const options: swaggerJsdoc.Options = {
             { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
             { name: 'limit', in: 'query', schema: { type: 'integer', default: 20 } },
             { name: 'search', in: 'query', schema: { type: 'string' } },
+            {
+              name: 'ids',
+              in: 'query',
+              description: 'Restrict results to comma-separated Pokédex IDs, useful for favorites.',
+              schema: { type: 'string', example: '25,6,9' },
+            },
             { name: 'type', in: 'query', schema: { type: 'string' } },
             {
               name: 'sortBy',
@@ -168,7 +174,7 @@ const options: swaggerJsdoc.Options = {
           summary: 'Get random Pokémon',
           tags: ['Pokémon'],
           parameters: [
-            { name: 'count', in: 'query', schema: { type: 'integer', default: 1 } },
+            { name: 'count', in: 'query', schema: { type: 'integer', minimum: 1, maximum: 20, default: 1 } },
           ],
           responses: {
             200: { description: 'List of random Pokémon' },
@@ -235,6 +241,30 @@ const options: swaggerJsdoc.Options = {
             200: { description: 'Team deleted' },
           },
         },
+        put: {
+          summary: 'Update team by ID',
+          tags: ['Teams'],
+          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    name: { type: 'string' },
+                    description: { type: 'string' },
+                    members: { type: 'array' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: { description: 'Team updated successfully' },
+            404: { description: 'Team not found' },
+          },
+        },
       },
       '/battle/simulate': {
         post: {
@@ -257,6 +287,42 @@ const options: swaggerJsdoc.Options = {
           },
           responses: {
             200: { description: 'Battle simulation result with turns and winner' },
+          },
+        },
+      },
+      '/battle/simulate-team': {
+        post: {
+          summary: 'Simulate a multi-round battle between two Pokémon teams',
+          tags: ['Battle'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['team1', 'team2'],
+                  properties: {
+                    team1: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string', example: 'Red Champions' },
+                        pokemonIds: { type: 'array', items: { type: 'integer' }, example: [25, 6, 9] },
+                      },
+                    },
+                    team2: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string', example: 'Blue Rivals' },
+                        pokemonIds: { type: 'array', items: { type: 'integer' }, example: [3, 94, 149] },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: { description: 'Team battle simulation result with multiple rounds' },
           },
         },
       },

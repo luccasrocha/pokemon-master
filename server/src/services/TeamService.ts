@@ -7,9 +7,10 @@ import { NotFoundError, BadRequestError } from '../utils/errors';
 
 export class TeamService {
   private teams: Map<string, PokemonTeam> = new Map();
+  private readonly seedPromise: Promise<void>;
 
   constructor(private pokemonService: PokemonService) {
-    this.seedDefaultTeam();
+    this.seedPromise = this.seedDefaultTeam();
   }
 
   private async seedDefaultTeam(): Promise<void> {
@@ -78,12 +79,14 @@ export class TeamService {
   }
 
   public async getAllTeams(): Promise<PokemonTeam[]> {
+    await this.seedPromise;
     return Array.from(this.teams.values()).sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }
 
   public async getTeamById(id: string): Promise<PokemonTeam> {
+    await this.seedPromise;
     const team = this.teams.get(id);
     if (!team) {
       throw new NotFoundError(`Team with id "${id}" not found`);

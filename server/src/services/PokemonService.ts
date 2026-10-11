@@ -9,6 +9,9 @@ import {
   POKEMON_SPRITE_BASE_URL,
   OFFICIAL_ARTWORK_BASE_URL,
   ANIMATED_SPRITE_BASE_URL,
+  SHINY_SPRITE_BASE_URL,
+  ANIMATED_SHINY_BASE_URL,
+  CRY_BASE_URL,
 } from '../data/seedPokemon';
 import { calculateTypeMatchup } from '../utils/typeChart';
 import { NotFoundError } from '../utils/errors';
@@ -33,7 +36,7 @@ export class PokemonService {
   }
 
   public async getPokemonList(query: ListPokemonQuery) {
-    const { page, limit, search, type, sortBy, order } = query;
+    const { page, limit, search, type, sortBy, order, ids } = query;
 
     // Start with all seeded Pokémon
     let items = Array.from(this.localDb.values());
@@ -52,6 +55,11 @@ export class PokemonService {
     // Filter by type
     if (type) {
       items = items.filter((p) => p.types.includes(type as PokemonTypeName));
+    }
+
+    if (ids) {
+      const requestedIds = new Set(ids.split(',').map(Number));
+      items = items.filter((p) => requestedIds.has(p.id));
     }
 
     // Sorting
@@ -196,8 +204,12 @@ export class PokemonService {
             data.sprites?.other?.['official-artwork']?.front_default ||
             `${OFFICIAL_ARTWORK_BASE_URL}/${data.id}.png`,
           animatedFront: `${ANIMATED_SPRITE_BASE_URL}/${data.id}.gif`,
+          frontShiny:
+            data.sprites?.front_shiny || `${SHINY_SPRITE_BASE_URL}/${data.id}.png`,
+          animatedShiny: `${ANIMATED_SHINY_BASE_URL}/${data.id}.gif`,
         },
         generation: Math.min(Math.ceil(data.id / 151), 9),
+        cryUrl: `${CRY_BASE_URL}/${data.id}.ogg`,
       };
 
       return pokemon;
@@ -217,8 +229,11 @@ export class PokemonService {
   }
 
   public getRandomPokemon(count = 1): Pokemon[] {
-    const all = Array.from(this.localDb.values());
-    const shuffled = [...all].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, Math.min(count, all.length));
+    const shuffled = Array.from(this.localDb.values());
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 }

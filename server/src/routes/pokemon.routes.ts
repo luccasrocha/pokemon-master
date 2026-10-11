@@ -4,6 +4,7 @@ import { validateRequest } from '../middlewares/validate';
 import {
   listPokemonQuerySchema,
   pokemonParamSchema,
+  randomPokemonQuerySchema,
 } from '../schemas/pokemon.schemas';
 
 export const createPokemonRouter = (controller: PokemonController): Router => {
@@ -17,7 +18,7 @@ export const createPokemonRouter = (controller: PokemonController): Router => {
 
   router.get('/types', controller.getTypes);
 
-  router.get('/random', controller.getRandom);
+  router.get('/random', validateRequest({ query: randomPokemonQuerySchema }), controller.getRandom);
 
   router.get(
     '/:identifier',
