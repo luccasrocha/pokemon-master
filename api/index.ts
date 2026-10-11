@@ -1,5 +1,3 @@
-import { createApp } from '../server/src/app';
-
-const app = createApp();
+import app from '../server/src/app';
 
 export default app;

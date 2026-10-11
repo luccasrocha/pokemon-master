@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: pokemon-master
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm ci && npm --prefix server ci && npm run build:full
+    startCommand: npm start
+    healthCheckPath: /health

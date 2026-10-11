@@ -1,4 +1,6 @@
 import express, { Application, Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -51,6 +53,31 @@ export const createApp = (): Application => {
   const apiRouter = createApiRouter();
   app.use('/api/v1', apiRouter);
   app.use('/v1', apiRouter);
+
+  // In a single-service deployment (for example Render), Express also serves
+  // the Vite build. During local API-only development, the dist directory may
+  // not exist, so the API's discovery response remains available at `/`.
+  const frontendDir = path.resolve(__dirname, '../../dist');
+  const frontendIndex = path.join(frontendDir, 'index.html');
+  if (fs.existsSync(frontendIndex)) {
+    app.use(express.static(frontendDir));
+    app.get(/.*/, (req, res, next) => {
+      const isApiPath = req.path === '/health'
+        || req.path === '/api'
+        || req.path.startsWith('/api/')
+        || req.path === '/v1'
+        || req.path.startsWith('/v1/');
+
+      if (isApiPath) {
+        next();
+        return;
+      }
+
+      res.sendFile(frontendIndex, (error) => {
+        if (error) next(error);
+      });
+    });
+  }
 
   // Root Welcome & Discovery
   app.get('/', (_req: Request, res: Response) => {
