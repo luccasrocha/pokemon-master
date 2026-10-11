@@ -94,6 +94,22 @@ flowchart TD
 
 ## 🛠️ Como Executar
 
+## 🌐 Publicar na internet
+
+O projeto está preparado para publicação na **Vercel**: o frontend é compilado como site estático e a API Express é servida por uma função em `/api`. A Vercel fornece um endereço público gratuito no formato `seu-projeto.vercel.app`; para usar um domínio próprio (por exemplo, `meusite.com.br`), é preciso registrar/comprar esse domínio e conectá-lo nas configurações do projeto.
+
+### Passo a passo
+
+1. Envie este projeto para um repositório GitHub (público ou privado).
+2. Entre em [vercel.com](https://vercel.com), crie uma conta e escolha **Add New → Project**.
+3. Importe o repositório. Mantenha a pasta raiz como diretório do projeto; a configuração de build e o `vercel.json` já estão neste nível.
+4. Clique em **Deploy**. Quando terminar, abra o endereço `*.vercel.app` exibido pela Vercel. A interface e os endpoints `/api/v1/...`, `/api/docs` e `/health` usam o mesmo domínio.
+5. Para domínio próprio, abra **Project → Settings → Domains**, informe o domínio e siga os registros DNS que a Vercel mostrar no painel do registrador do domínio. A Vercel configura HTTPS depois da validação do DNS.
+
+Não há variáveis de ambiente obrigatórias para a publicação atual. A aplicação usa dados locais dos 151 Pokémon e consulta a PokeAPI como complemento.
+
+**Atenção aos times salvos:** atualmente eles ficam em memória no processo da API. Em hospedagem serverless, como a Vercel, times criados podem desaparecer entre execuções. A Pokédex e as batalhas funcionam sem banco; para manter times permanentemente, será necessário conectar um banco de dados persistente antes de divulgar esse recurso como armazenamento confiável.
+
 ### 1. Iniciar Fullstack (Backend + Frontend simultaneamente)
 ```bash
 npm run dev
