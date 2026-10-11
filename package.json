@@ -6,7 +6,7 @@
     "dev": "concurrently -n \"API,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"npm --prefix server run dev\" \"vite\"",
     "dev:server": "npm --prefix server run dev",
     "dev:client": "vite",
-    "build": "npm --prefix server run build && tsc && vite build",
+    "build": "tsc && vite build",
     "test": "npm --prefix server test",
     "preview": "vite preview"
   },
