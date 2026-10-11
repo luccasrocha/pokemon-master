@@ -1,0 +1,35 @@
+{
+  "name": "pokemon-fullstack",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently -n \"API,APP\" -c \"bgBlue.bold,bgGreen.bold\" \"npm --prefix server run dev\" \"vite\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "vite",
+    "build": "npm --prefix server run build && tsc && vite build",
+    "test": "npm --prefix server test",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.7",
+    "express": "^5.3.0",
+    "helmet": "^8.3.0",
+    "morgan": "^1.12.1",
+    "node-cache": "^5.1.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@vitejs/plugin-react": "^1.0.7",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.9.3",
+    "vite": "^2.9.0"
+  }
+}

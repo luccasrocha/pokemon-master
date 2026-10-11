@@ -1,0 +1,119 @@
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(239, 68, 68, 0.4);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-red: #ef4444;
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-blue: #3b82f6;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Utility Containers */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Glass Card */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+/* Type Colors */
+.badge-normal   { background: #9fa19f; color: #fff; }
+.badge-fire     { background: linear-gradient(135deg, #f97316, #ef4444); color: #fff; }
+.badge-water    { background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; }
+.badge-grass    { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; }
+.badge-electric { background: linear-gradient(135deg, #eab308, #ca8a04); color: #1e293b; font-weight: 700; }
+.badge-ice      { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; font-weight: 700; }
+.badge-fighting { background: linear-gradient(135deg, #b91c1c, #991b1b); color: #fff; }
+.badge-poison   { background: linear-gradient(135deg, #9333ea, #7e22ce); color: #fff; }
+.badge-ground   { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; }
+.badge-flying   { background: linear-gradient(135deg, #818cf8, #6366f1); color: #fff; }
+.badge-psychic  { background: linear-gradient(135deg, #ec4899, #db2777); color: #fff; }
+.badge-bug      { background: linear-gradient(135deg, #84cc16, #65a30d); color: #fff; }
+.badge-rock     { background: linear-gradient(135deg, #78716c, #57534e); color: #fff; }
+.badge-ghost    { background: linear-gradient(135deg, #6b21a8, #581c87); color: #fff; }
+.badge-dragon   { background: linear-gradient(135deg, #4f46e5, #4338ca); color: #fff; }
+.badge-steel    { background: linear-gradient(135deg, #64748b, #475569); color: #fff; }
+.badge-fairy    { background: linear-gradient(135deg, #f472b6, #e11d48); color: #fff; }
+.badge-dark     { background: linear-gradient(135deg, #334155, #1e293b); color: #fff; }
+
+.type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.float-hover:hover {
+  animation: float 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
