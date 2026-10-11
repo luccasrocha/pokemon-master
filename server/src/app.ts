@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from 'express';
+import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -7,6 +8,8 @@ import { swaggerSpec } from './docs/swagger';
 import { createApiRouter } from './routes';
 import { errorHandler } from './middlewares/errorHandler';
 import { NotFoundError } from './utils/errors';
+
+dotenv.config();
 
 export const createApp = (): Application => {
   const app = express();
@@ -76,3 +79,7 @@ export const createApp = (): Application => {
 
   return app;
 };
+
+// Vercel's Express runtime needs the application instance as the module default export.
+const app = createApp();
+export default app;
